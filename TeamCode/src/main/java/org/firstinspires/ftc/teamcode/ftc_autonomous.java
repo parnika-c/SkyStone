@@ -66,20 +66,14 @@ public class ftc_autonomous extends LinearOpMode {
     private double left = 0.0;
 
 
-    private void lateralmovement() {
+    private void ForwardBackward() {
         leftfront.setPower(drivepower);
         rightfront.setPower(drivepower);
         rightback.setPower(drivepower);
         leftback.setPower(drivepower);
     }
 
-    private void lateralright() {
-        leftfront.setPower(right);
-        rightfront.setPower(-right);
-        rightback.setPower(right);
-        leftback.setPower(-right);
-    }
-
+//lateralleft is -1
     private void lateralleft() {
         leftfront.setPower(-left);
         rightfront.setPower(left);
@@ -87,6 +81,12 @@ public class ftc_autonomous extends LinearOpMode {
         leftback.setPower(left);
     }
 
+    private void lateralmovement() {
+        leftfront.setPower(drivepower);
+        rightfront.setPower(drivepower);
+        rightback.setPower(drivepower);
+        leftback.setPower(drivepower);
+    }
 
     //Define class members
     Servo   servo;
@@ -96,74 +96,87 @@ public class ftc_autonomous extends LinearOpMode {
 
 
         public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+            telemetry.addData("Status", "Initialized");
+            telemetry.update();
 
-        servo = hardwareMap.servo.get("servo");
-        servo.setPosition(servoPosition);
+            servo = hardwareMap.servo.get("servo");
+            servo.setPosition(servoPosition);
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        leftfront  = hardwareMap.get(DcMotor.class, "leftfront");
-        rightfront = hardwareMap.get(DcMotor.class, "rightfront");
-        rightback = hardwareMap.get(DcMotor.class, "rightback");
-        leftback = hardwareMap.get(DcMotor.class, "leftback");
-        // Arm  = hardwareMap.get(DcMotor.class, "Arm");
-        // boxmotor = hardwareMap.get(Servo.class, "boxmotor");
+            // Initialize the hardware variables. Note that the strings used here as parameters
+            leftfront = hardwareMap.get(DcMotor.class, "leftfront");
+            rightfront = hardwareMap.get(DcMotor.class, "rightfront");
+            rightback = hardwareMap.get(DcMotor.class, "rightback");
+            leftback = hardwareMap.get(DcMotor.class, "leftback");
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftfront.setDirection(DcMotor.Direction.REVERSE);
-        rightfront.setDirection(DcMotor.Direction.FORWARD);
-        leftback.setDirection(DcMotor.Direction.FORWARD);
-        //Arm.setDirection(DcMotor.Direction.FORWARD);
-        rightback.setDirection(DcMotor.Direction.REVERSE);
+            // Most robots need the motor on one side to be reversed to drive forward
+            // Reverse the motor that runs backwards when connected directly to the battery
+            leftfront.setDirection(DcMotor.Direction.REVERSE);
+            rightfront.setDirection(DcMotor.Direction.FORWARD);
+            leftback.setDirection(DcMotor.Direction.FORWARD);
+            rightback.setDirection(DcMotor.Direction.REVERSE);
 
-        waitForStart();
-        runtime.reset();
+            waitForStart();
+            runtime.reset();
 
 
-        //drive forward for 2 seconds
-        drivepower = -0.5;
-        lateralmovement();
-        telemetry.addData("Status", "Moving Backword");
-        telemetry.update();
-        sleep(1770);
+            //drive backward for 2 seconds
+            drivepower = -0.5;
+            ForwardBackward();
+            telemetry.addData("Status", "Moving Backward");
+            telemetry.update();
+            sleep(1770);
 
-        //stop motors
-        drivepower = 0.0;
-        lateralmovement();
-        telemetry.addData("Status", "Stopping");
-        telemetry.update();
+            //stop motors
+            drivepower = 0.0;
+            ForwardBackward();
+            telemetry.addData("Status", "Stopping");
+            telemetry.update();
 
-        // servomotors
-        servoPosition = 0.95;
-        servo.setPosition(servoPosition);
-        sleep(900);
+            // servomotors
+            servoPosition = 0.95;
+            servo.setPosition(servoPosition);
+            sleep(900);
 
-        //drive backwards for 2 seconds
-        drivepower = 0.5;
-        lateralmovement();
-        telemetry.addData("Status", "Moving Backwards");
-        telemetry.update();
-        sleep(2300);
+            //drive forwards for 2 seconds
+            drivepower = 0.2;
+            leftfront.setPower(0.8);
+            rightfront.setPower(0.3);
+            leftback.setPower(0.8);
+            rightback.setPower(0.3);
+            telemetry.addData("Status", "Moving Forward");
+            telemetry.update();
+            sleep(2900);
 
-        drivepower = 0.0;
-        lateralmovement();
-        telemetry.addData("Status", "Stop Program");
-        telemetry.update();
+            drivepower = 0.0;
+            ForwardBackward();
+            telemetry.addData("Status", "Stop Program");
+            telemetry.update();
 
-        servoPosition = 0.4;
-        servo.setPosition(servoPosition);
-        sleep(500);
-        drivepower = 0.0;
+            servoPosition = 0.4;
+            servo.setPosition(servoPosition);
+            sleep(500);
+            drivepower = 0.0;
 
 
+            // Reverse the motor that runs backwards when connected directly to the battery //Lateral Movement
+            leftfront.setDirection(DcMotor.Direction.REVERSE);
+            rightfront.setDirection(DcMotor.Direction.FORWARD);
+            leftback.setDirection(DcMotor.Direction.REVERSE);
+            rightback.setDirection(DcMotor.Direction.FORWARD);
 
-        lateralmovement();
-        telemetry.addData("Status", "Stop Program");
-        telemetry.update();
+            waitForStart();
+            runtime.reset();
+
+            left = 1;
+            lateralleft();
+            telemetry.addData("Status", "Stop Program");
+            telemetry.update();
+            sleep(2200);
+
+            telemetry.addData("Status", "Stop Program");
+            telemetry.update();
+        }
     }
-}
 
 
 

@@ -50,9 +50,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous1", group="Linear Opmode")
+@Autonomous(name="Autonomousleft", group="Linear Opmode")
 //Disabled
-public class Autonomous1 extends LinearOpMode {
+public class Autonomousleft extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftfront = null;
@@ -73,12 +73,12 @@ public class Autonomous1 extends LinearOpMode {
         leftback.setPower(drivepower);
     }
 
-    private void lateralright() {
-        leftfront.setPower(-right);
-        rightfront.setPower(right);
-        rightback.setPower(-right);
-        leftback.setPower(right);
-    }
+    //private void lateralright() {
+        //leftfront.setPower(-right);
+        //rightfront.setPower(right);
+        //rightback.setPower(-right);
+        //leftback.setPower(right);
+    //}
 
     private void lateralleft() {
         leftfront.setPower(-left);
@@ -111,26 +111,19 @@ public class Autonomous1 extends LinearOpMode {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftfront.setDirection(DcMotor.Direction.FORWARD);
-        rightfront.setDirection(DcMotor.Direction.REVERSE);
-        leftback.setDirection(DcMotor.Direction.FORWARD);
-        //Arm.setDirection(DcMotor.Direction.FORWARD);
-        rightback.setDirection(DcMotor.Direction.REVERSE);
+        leftfront.setDirection(DcMotor.Direction.REVERSE);
+        rightfront.setDirection(DcMotor.Direction.FORWARD);
+        leftback.setDirection(DcMotor.Direction.REVERSE);
+        rightback.setDirection(DcMotor.Direction.FORWARD);
 
         waitForStart();
         runtime.reset();
 
-        right = 1;
-        lateralright();
+        left = 1;
+        lateralleft();
         telemetry.addData("Status", "Stop Program");
         telemetry.update();
         sleep(2000);
-
-        drivepower = -0.5;
-        lateralmovement();
-        telemetry.addData("Status", "Moving Backwards");
-        telemetry.update();
-        sleep(200);
 
         telemetry.addData("Status", "Stop Program");
         telemetry.update();
