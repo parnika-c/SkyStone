@@ -65,27 +65,48 @@ public class ftc_autonomous extends LinearOpMode {
     private double right = 0.0;
     private double left = 0.0;
 
-
-    private void ForwardBackward() {
+    //This function is used to make robot go forward or backward based on the drive power (-0.5: Backward), (0.5: Forward), (0:Stop)
+    private void forwardBackward() {
         leftfront.setPower(drivepower);
         rightfront.setPower(drivepower);
         rightback.setPower(drivepower);
         leftback.setPower(drivepower);
     }
 
-//lateralleft is -1
-    private void lateralleft() {
+    //Before using this function set the variable(left) to 1
+    // This function would be used when you want to move your robot towards the left.
+    // Example: left = 1
+    private void lateralLeft() {
         leftfront.setPower(-left);
         rightfront.setPower(left);
         rightback.setPower(-left);
         leftback.setPower(left);
     }
 
-    private void lateralmovement() {
-        leftfront.setPower(drivepower);
-        rightfront.setPower(drivepower);
-        rightback.setPower(drivepower);
-        leftback.setPower(drivepower);
+    //Before using this function set the variable(right) to 1
+    // This function would be used when you want to move your robot towards the right.
+    // Example: right = 1
+    private void lateralRight() {
+        leftfront.setPower(-right);
+        rightfront.setPower(right);
+        rightback.setPower(-right);
+        leftback.setPower(right);
+    }
+
+    //This function is used for setting the direction of the motors(for rightward and leftward motion)
+    private void setMovementLateral() {
+        leftfront.setDirection(DcMotor.Direction.REVERSE);
+        rightfront.setDirection(DcMotor.Direction.FORWARD);
+        leftback.setDirection(DcMotor.Direction.REVERSE);
+        rightback.setDirection(DcMotor.Direction.FORWARD);
+    }
+
+    // This function is used for setting the direction of the motors(for forward and backward motion)
+    private void setMovement_For_Back() {
+        leftfront.setDirection(DcMotor.Direction.REVERSE);
+        rightfront.setDirection(DcMotor.Direction.FORWARD);
+        leftback.setDirection(DcMotor.Direction.FORWARD);
+        rightback.setDirection(DcMotor.Direction.REVERSE);
     }
 
     //Define class members
@@ -110,10 +131,7 @@ public class ftc_autonomous extends LinearOpMode {
 
             // Most robots need the motor on one side to be reversed to drive forward
             // Reverse the motor that runs backwards when connected directly to the battery
-            leftfront.setDirection(DcMotor.Direction.REVERSE);
-            rightfront.setDirection(DcMotor.Direction.FORWARD);
-            leftback.setDirection(DcMotor.Direction.FORWARD);
-            rightback.setDirection(DcMotor.Direction.REVERSE);
+            setMovement_For_Back();
 
             waitForStart();
             runtime.reset();
@@ -121,14 +139,14 @@ public class ftc_autonomous extends LinearOpMode {
 
             //drive backward for 2 seconds
             drivepower = -0.5;
-            ForwardBackward();
+            forwardBackward();
             telemetry.addData("Status", "Moving Backward");
             telemetry.update();
             sleep(1770);
 
             //stop motors
             drivepower = 0.0;
-            ForwardBackward();
+            forwardBackward();
             telemetry.addData("Status", "Stopping");
             telemetry.update();
 
@@ -148,7 +166,7 @@ public class ftc_autonomous extends LinearOpMode {
             sleep(2900);
 
             drivepower = 0.0;
-            ForwardBackward();
+            forwardBackward();
             telemetry.addData("Status", "Stop Program");
             telemetry.update();
 
@@ -159,16 +177,13 @@ public class ftc_autonomous extends LinearOpMode {
 
 
             // Reverse the motor that runs backwards when connected directly to the battery //Lateral Movement
-            leftfront.setDirection(DcMotor.Direction.REVERSE);
-            rightfront.setDirection(DcMotor.Direction.FORWARD);
-            leftback.setDirection(DcMotor.Direction.REVERSE);
-            rightback.setDirection(DcMotor.Direction.FORWARD);
+            setMovementLateral();
 
             waitForStart();
             runtime.reset();
 
             left = 1;
-            lateralleft();
+            lateralLeft();
             telemetry.addData("Status", "Stop Program");
             telemetry.update();
             sleep(2200);
