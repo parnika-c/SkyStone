@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -58,7 +59,6 @@ public class ftc_autonomous extends LinearOpMode {
     private DcMotor leftfront = null;
     private DcMotor rightfront = null;
     private DcMotor leftback = null;
-    //private DcMotor Arm = null;
     private DcMotor rightback = null;
 
     private double drivepower = 0.0;
@@ -112,8 +112,8 @@ public class ftc_autonomous extends LinearOpMode {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftfront.setDirection(DcMotor.Direction.FORWARD);
-        rightfront.setDirection(DcMotor.Direction.REVERSE);
+        leftfront.setDirection(DcMotor.Direction.REVERSE);
+        rightfront.setDirection(DcMotor.Direction.FORWARD);
         leftback.setDirection(DcMotor.Direction.FORWARD);
         //Arm.setDirection(DcMotor.Direction.FORWARD);
         rightback.setDirection(DcMotor.Direction.REVERSE);
@@ -121,18 +121,13 @@ public class ftc_autonomous extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
-        // Arm.setPower(1);
-        //sleep(2500);
-        //Arm.setPower(0);
-
 
         //drive forward for 2 seconds
         drivepower = -0.5;
         lateralmovement();
         telemetry.addData("Status", "Moving Backword");
         telemetry.update();
-        sleep(1760);
+        sleep(1770);
 
         //stop motors
         drivepower = 0.0;
