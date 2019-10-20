@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Autonomous1", group="Linear Opmode")
-//Disabled
+//@Disabled
 public class Autonomous1 extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -90,7 +90,7 @@ public class Autonomous1 extends LinearOpMode {
 
     //Define class members
     Servo   servo;
-    double  servoPosition = 0.4; // Start at halfway position
+    double  servoPosition = 0.6; // Start at halfway position
     boolean rampUp = true;
 
 
