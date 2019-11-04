@@ -29,13 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -51,147 +51,109 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="ftc_autonomous", group="Linear Opmode")
-//Disabled
-public class ftc_autonomous extends LinearOpMode {
+@TeleOp(name="finalteleop", group="Linear Opmode")
+//@Disabled
+public class gamepad extends LinearOpMode {
 
+    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftfront = null;
     private DcMotor rightfront = null;
     private DcMotor leftback = null;
+    private DcMotor Arm = null;
     private DcMotor rightback = null;
 
+    private double armpower = 0.0;
     private double drivepower = 0.0;
     private double right = 0.0;
     private double left = 0.0;
 
-    //This function is used to make robot go forward or backward based on the drive power (-0.5: Backward), (0.5: Forward), (0:Stop)
-    private void forwardBackward() {
-        leftfront.setPower(drivepower);
-        rightfront.setPower(drivepower);
-        rightback.setPower(drivepower);
-        leftback.setPower(drivepower);
+    double rightteleop;
+    double leftteleop;
+
+    private void lateralright() {
+        leftfront.setPower(rightteleop);
+        rightfront.setPower(-rightteleop);
+        rightback.setPower(rightteleop);
+        leftback.setPower(-rightteleop);
     }
 
-    //Before using this function set the variable(left) to 1
-    // This function would be used when you want to move your robot towards the left.
-    // Example: left = 1
-    private void lateralLeft() {
-        leftfront.setPower(-left);
-        rightfront.setPower(left);
-        rightback.setPower(-left);
-        leftback.setPower(left);
+    private void lateralleft() {
+        leftfront.setPower(-leftteleop);
+        rightfront.setPower(leftteleop);
+        rightback.setPower(-leftteleop);
+        leftback.setPower(leftteleop);
     }
-
-    //Before using this function set the variable(right) to 1
-    // This function would be used when you want to move your robot towards the right.
-    // Example: right = 1
-    private void lateralRight() {
-        leftfront.setPower(-right);
-        rightfront.setPower(right);
-        rightback.setPower(-right);
-        leftback.setPower(right);
-    }
-
-    //This function is used for setting the direction of the motors(for rightward and leftward motion)
-    private void setMovementLateral() {
-        leftfront.setDirection(DcMotor.Direction.REVERSE);
-        rightfront.setDirection(DcMotor.Direction.FORWARD);
-        leftback.setDirection(DcMotor.Direction.REVERSE);
-        rightback.setDirection(DcMotor.Direction.FORWARD);
-    }
-
-    // This function is used for setting the direction of the motors(for forward and backward motion)
-    private void setMovement_For_Back() {
-        leftfront.setDirection(DcMotor.Direction.REVERSE);
-        rightfront.setDirection(DcMotor.Direction.FORWARD);
-        leftback.setDirection(DcMotor.Direction.FORWARD);
-        rightback.setDirection(DcMotor.Direction.REVERSE);
-    }
-
-    //Define class members
-    Servo   servo;
+    Servo servo;
     double  servoPosition = 0.4; // Start at halfway position
     boolean rampUp = true;
 
+    Servo   servo2;
+    double  servo2Position = 0.4; // Start at halfway position
+    boolean rampUp2 = true;
 
 
+    @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        servo = hardwareMap.servo.get("servo");
-        servo.setPosition(servoPosition);
-
         // Initialize the hardware variables. Note that the strings used here as parameters
-        leftfront = hardwareMap.get(DcMotor.class, "leftfront");
+        // to 'get' must correspond to the names assigned during the robot configuration
+        // step (using the FTC Robot Controller app on the phone).
+        leftfront  = hardwareMap.get(DcMotor.class, "leftfront");
         rightfront = hardwareMap.get(DcMotor.class, "rightfront");
         rightback = hardwareMap.get(DcMotor.class, "rightback");
         leftback = hardwareMap.get(DcMotor.class, "leftback");
+        Arm  = hardwareMap.get(DcMotor.class, "Arm");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        setMovement_For_Back();
 
+        leftfront.setDirection(DcMotor.Direction.FORWARD);
+        rightfront.setDirection(DcMotor.Direction.REVERSE);
+        leftback.setDirection(DcMotor.Direction.FORWARD);
+        rightback.setDirection(DcMotor.Direction.REVERSE);
+        Arm.setDirection(DcMotor.Direction.FORWARD);
+
+        // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
 
-        //drive backward for 2 seconds
-        drivepower = -0.5;
-        forwardBackward();
-        telemetry.addData("Status", "Moving Backward");
-        telemetry.update();
-        sleep(1770);
+            while(1<2) {
 
-        //stop motors
-        drivepower = 0.0;
-        forwardBackward();
-        telemetry.addData("Status", "Stopping");
-        telemetry.update();
+                rightteleop = -gamepad1.right_trigger;
+                leftteleop = -gamepad1.left_trigger;
+                lateralleft();
+                lateralright();
 
-        // servomotors
-        servoPosition = 0.95;
-        servo.setPosition(servoPosition);
-        sleep(900);
+                // Setup a variable for each drive wheel to save power level for telemetry
+                double leftPower;
+                double rightPower;
 
-        //drive forwards for 2 seconds
-        drivepower = 0.2;
-        leftfront.setPower(0.8);
-        rightfront.setPower(0.3);
-        leftback.setPower(0.8);
-        rightback.setPower(0.3);
-        telemetry.addData("Status", "Moving Forward");
-        telemetry.update();
-        sleep(2900);
+                double drive = -gamepad1.left_stick_y;
+                double turn  = -gamepad1.right_stick_x;
+                leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+                rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
-        drivepower = 0.0;
-        forwardBackward();
-        telemetry.addData("Status", "Stop Program");
-        telemetry.update();
-
-        servoPosition = 0.4;
-        servo.setPosition(servoPosition);
-        sleep(500);
-        drivepower = 0.0;
+                double armteleop = -gamepad2.left_stick_x;
 
 
-        // Reverse the motor that runs backwards when connected directly to the battery //Lateral Movement
-        setMovementLateral();
+                // Send calculated power to wheels
+                leftfront.setPower(leftPower);
+                rightfront.setPower(rightPower);
+                leftback.setPower(leftPower);
+                rightback.setPower(rightPower);
+                Arm.setPower(armteleop);
 
-        waitForStart();
-        runtime.reset();
-
-        left = 1;
-        lateralLeft();
-        telemetry.addData("Status", "Stop Program");
-        telemetry.update();
-        sleep(2200);
-
-        telemetry.addData("Status", "Stop Program");
-        telemetry.update();
+                telemetry.addData("Status", "Run Time: " + runtime.toString());
+                telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+                telemetry.update();
+            }
+        }
     }
 }
-
-
 
