@@ -417,7 +417,7 @@ public class DetectingSkystones extends Movement {
                 frontServo.setPosition(0.4);
                 goForward(0.4, 550);
                 stopWithSleep("stop", 100);
-                armclamp();
+                //armclamp();
                 stopWithSleep("stopafterarmclamp", 200);
                 goBackward(0.6, 575);
                 stopWithSleep("stop", 100);

@@ -82,8 +82,8 @@ public class DriverControl extends Movement {
                 // x - to move back servo down
                 if (gamepad2.x) {
 
-                    leftConstruction.setPosition(0.5);
-                    rightConstruction.setPosition(0.4);
+                    leftConstruction.setPosition(0.35);
+                    rightConstruction.setPosition(0.43);
                     telemetry.addData("back servos down", "servoposition: 0,0" );
                 }
 
