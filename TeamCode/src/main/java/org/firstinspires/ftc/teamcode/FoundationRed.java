@@ -22,10 +22,10 @@ public class FoundationRed extends Movement {
         backServosUp();
 
         // strafe right to align with Construction Site
-        goRight( 1, 550);
+        goRight( 1, 775);
 
         //drive backward
-        goBackward(0.5, 1800);
+        goBackward(0.5, 1700);
 
         //back servos move down
         backServosDown();
@@ -33,7 +33,7 @@ public class FoundationRed extends Movement {
         stopWithSleep("motors stopped",800);
 
         //drive forward
-        goForward(0.5,2050);
+        goForward(0.5,1950);
 
         //back servos move up
         backServosUp();
@@ -41,14 +41,9 @@ public class FoundationRed extends Movement {
         //stop motors
         stopWithSleep("motors stopped",300);
 
-        goForward(1, 10);
-
         //strafe to the left (park under the bridge)
-        goLeft(1,1500);
+        goLeft(1,2200);
 
-        goBackward(0.5, 200);
-
-        goLeft(1,550);
 
         telemetry.addData("Status", "Stop Program");
         telemetry.update();
